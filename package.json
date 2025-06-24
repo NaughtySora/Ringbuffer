@@ -1,0 +1,34 @@
+{
+  "name": "naughty-ring-buffer",
+  "version": "0.1.0",
+  "author": "NaughtySora <naughtysora@proton.me>",
+  "license": "MIT",
+  "main": "main.js",
+  "types": "main.d.ts",
+  "description": "Ring Buffer",
+  "keywords": [
+    "buffer",
+    "datatype",
+    "ring buffer"
+  ],
+  "readmeFilename": "README.md",
+  "files": [
+    "lib/",
+    "main.d.ts"
+  ],
+  "scripts": {
+    "types": "tsc -p ./tsconfig.json",
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaughtySora/naughty-ring-buffer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NaughtySora/naughty-ring-buffer/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2"
+  }
+}
