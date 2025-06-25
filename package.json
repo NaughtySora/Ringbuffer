@@ -22,10 +22,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NaughtySora/naughty-ring-buffer.git"
+    "url": "git+https://github.com/NaughtySora/Ringbuffer.git"
   },
   "bugs": {
-    "url": "https://github.com/NaughtySora/naughty-ring-buffer/issues"
+    "url": "https://github.com/NaughtySora/Ringbuffer/issues"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",
