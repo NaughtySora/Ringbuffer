@@ -2,12 +2,16 @@
 # Ring Buffer
 
 ## Types
-
-`class RingBuffer {`\
-  `constructor(size: number);`\
-  `enqueue(value: number): boolean;`\
-  `dequeue(): number;`\
-`}`
+```ts
+class RingBuffer {
+  constructor(size: number);
+  enqueue(value: number): boolean;
+  dequeue(): number;
+  isFull(): boolean;
+  isEmpty(): boolean;
+  size: number;
+}
+```
 
 ## Example
 
