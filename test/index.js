@@ -1,31 +1,82 @@
 "use strict";
 
 const assert = require("node:assert");
+const { describe, it } = require('node:test');
 const RingBuffer = require("../lib/index.js");
 
-const buffer = new RingBuffer(4);
+describe('RingBuffer', () => {
+  it('enqueue and dequeue basic operations', () => {
+    const buf = new RingBuffer(4);
 
-assert.strictEqual(buffer.enqueue(1), true);
-assert.strictEqual(buffer.enqueue(2), true);
-assert.strictEqual(buffer.enqueue(3), true);
-assert.strictEqual(buffer.enqueue(4), true);
-assert.strictEqual(buffer.enqueue(5), false);
-assert.strictEqual(buffer.enqueue(6), false);
-assert.strictEqual(buffer.enqueue(7), false);
-assert.strictEqual(buffer.enqueue(8), false);
+    assert.strictEqual(buf.size, 0);
+    assert.strictEqual(buf.isEmpty(), true);
+    assert.strictEqual(buf.isFull(), false);
 
-assert.strictEqual(buffer.dequeue(), 1);
-assert.strictEqual(buffer.dequeue(), 2);
-assert.strictEqual(buffer.dequeue(), 3);
-assert.strictEqual(buffer.dequeue(), 4);
+    buf.enqueue(10);
+    buf.enqueue(20);
+    buf.enqueue(30);
 
-assert.strictEqual(buffer.enqueue(69), true);
-assert.strictEqual(buffer.dequeue(), 69);
-assert.strictEqual(buffer.enqueue(42), true);
-assert.strictEqual(buffer.dequeue(), 42);
-assert.strictEqual(buffer.dequeue(), -1);
+    assert.strictEqual(buf.size, 3);
+    assert.strictEqual(buf.isEmpty(), false);
 
-assert.strictEqual(buffer.enqueue(12), true);
-assert.strictEqual(buffer.enqueue(13), true);
-assert.strictEqual(buffer.enqueue(37), true);
-assert.strictEqual(buffer.dequeue(), 12);
+    assert.strictEqual(buf.dequeue(), 10);
+    assert.strictEqual(buf.dequeue(), 20);
+    assert.strictEqual(buf.size, 1);
+
+    buf.enqueue(40);
+    buf.enqueue(50);
+    buf.enqueue(60);
+
+    assert.strictEqual(buf.isFull(), true);
+    assert.strictEqual(buf.size, 4);
+
+    assert.strictEqual(buf.dequeue(), 30);
+    assert.strictEqual(buf.dequeue(), 40);
+    assert.strictEqual(buf.dequeue(), 50);
+    assert.strictEqual(buf.dequeue(), 60);
+    assert.strictEqual(buf.isEmpty(), true);
+  });
+
+  it('wraps around correctly', () => {
+    const buf = new RingBuffer(3);
+    buf.enqueue(1);
+    buf.enqueue(2);
+    buf.enqueue(3);
+
+    assert.strictEqual(buf.isFull(), true);
+    assert.strictEqual(buf.dequeue(), 1);
+    assert.strictEqual(buf.dequeue(), 2);
+
+    buf.enqueue(4);
+    buf.enqueue(5);
+
+    assert.strictEqual(buf.dequeue(), 3);
+    assert.strictEqual(buf.dequeue(), 4);
+    assert.strictEqual(buf.dequeue(), 5);
+    assert.strictEqual(buf.isEmpty(), true);
+  });
+
+  it('returns undefined when dequeue empty', () => {
+    const buf = new RingBuffer(2);
+    assert.strictEqual(buf.dequeue(), undefined);
+  });
+
+  it('returns false with enqueue when full, true otherwise', () => {
+    const buf = new RingBuffer(2);
+    assert.ok(buf.enqueue(1));
+    assert.ok(buf.enqueue(2));
+    assert.ok(!buf.enqueue(3));
+    buf.dequeue();
+    assert.ok(buf.enqueue(4));
+  });
+
+  it('single element repeatedly', () => {
+    const buf = new RingBuffer(1);
+    buf.enqueue(42);
+    assert.strictEqual(buf.dequeue(), 42);
+    assert.strictEqual(buf.isEmpty(), true);
+    buf.enqueue(99);
+    assert.strictEqual(buf.dequeue(), 99);
+    assert.strictEqual(buf.isEmpty(), true);
+  });
+});
