@@ -13,3 +13,10 @@
 - types
 - test
 - docs
+
+## [0.3.0] - 2026-05-2
+
+- init
+- types
+- test
+- docs
